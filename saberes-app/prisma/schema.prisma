@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id          BigInt    @id @default(autoincrement())
+  nome        String    @db.VarChar(255)
+  email       String    @unique @db.VarChar(255)
+  password    String    @db.VarChar(255)
+  perfil      Perfil    @default(PADRAO)
+  sexo        String    @db.Char(1)
+  cep         String    @db.VarChar(10)
+  complemento String?   @db.VarChar(255)
+  numero      Int
+  bairro      String    @db.VarChar(255)
+  cidade      String    @db.VarChar(255)
+  uf          String    @db.VarChar(2)
+  status      Boolean
+  
+  receitas      Receita[]
+  participacoes Participacao[]
+
+  @@map("usuarios")
+}
+
+model Atividade {
+  id        BigInt   @id @default(autoincrement())
+  nome      String   @db.VarChar(255)
+  descricao String?
+  data      DateTime @db.Date
+  hinicio   DateTime @db.Time
+  hfim      DateTime @db.Time
+  local     String   @db.VarChar(255)
+  status    Boolean
+
+  participacoes Participacao[]
+
+  @@map("atividades")
+}
+
+model Participacao {
+  id           BigInt    @id @default(autoincrement())
+  idUsuario    BigInt    @map("id_usuario")
+  idAtividade  BigInt    @map("id_atividade")
+
+  usuario    Usuario    @relation(fields: [idUsuario], references: [id])
+  atividade  Atividade  @relation(fields: [idAtividade], references: [id])
+
+  @@map("participacao")
+}
+
+model Receita {
+  id           BigInt  @id @default(autoincrement())
+  nome         String  @db.VarChar(255)
+  ingredientes String
+  preparo      String
+  idUsuario    BigInt  @map("id_usuario")
+
+  usuario Usuario @relation(fields: [idUsuario], references: [id])
+
+  @@map("receitas")
+}
+
+enum Perfil {
+  PADRAO @map("padrao")
+  ADMIN  @map("admin")
+}
