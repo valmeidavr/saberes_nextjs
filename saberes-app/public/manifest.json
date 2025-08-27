@@ -1,0 +1,117 @@
+{
+  "name": "Resgatando Saberes",
+  "short_name": "Saberes",
+  "description": "Sistema de gestão de conhecimentos tradicionais, agricultura sustentável e receitas saudáveis",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#1e293b",
+  "orientation": "portrait-primary",
+  "categories": ["education", "lifestyle", "productivity"],
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Home",
+      "description": "Ir para o dashboard principal",
+      "url": "/dashboard",
+      "icons": [
+        {
+          "src": "/icons/shortcut-home.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Receitas",
+      "short_name": "Receitas",
+      "description": "Ver receitas saudáveis",
+      "url": "/receitas",
+      "icons": [
+        {
+          "src": "/icons/shortcut-recipes.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Agricultura",
+      "short_name": "Agricultura",
+      "description": "Artigos sobre agricultura sustentável",
+      "url": "/agricultura",
+      "icons": [
+        {
+          "src": "/icons/shortcut-agriculture.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Atividades",
+      "short_name": "Atividades",
+      "description": "Calendário de atividades",
+      "url": "/atividades",
+      "icons": [
+        {
+          "src": "/icons/shortcut-activities.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}

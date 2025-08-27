@@ -331,9 +331,9 @@ export default function UsuariosPage() {
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="sexo">Sexo</Label>
-                      <Select value={formData.sexo} onValueChange={(value) => setFormData({...formData, sexo: value})}>
+                      <Select value={formData.sexo} onValueChange={(value) => setFormData({...formData, sexo: value})} required>
                         <SelectTrigger>
-                          <SelectValue placeholder="Selecione" />
+                          <SelectValue placeholder="Selecione o sexo" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="M">Masculino</SelectItem>
@@ -348,9 +348,12 @@ export default function UsuariosPage() {
                       <Input
                         id="cep"
                         value={formData.cep}
-                        onChange={(e) => setFormData({...formData, cep: e.target.value})}
+                        onChange={(e) => handleCepChange(e.target.value)}
+                        placeholder="Digite o CEP (8 dígitos)"
+                        maxLength={8}
                         required
                       />
+                      {cepLoading && <span className="text-xs text-slate-500">Buscando endereço...</span>}
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="numero">Número</Label>
@@ -392,13 +395,18 @@ export default function UsuariosPage() {
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="uf">UF</Label>
-                      <Input
-                        id="uf"
-                        maxLength={2}
-                        value={formData.uf}
-                        onChange={(e) => setFormData({...formData, uf: e.target.value.toUpperCase()})}
-                        required
-                      />
+                      <Select value={formData.uf} onValueChange={(value) => setFormData({...formData, uf: value})} required>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o estado" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {ufs.map((uf) => (
+                            <SelectItem key={uf} value={uf}>
+                              {uf}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                   <div className="grid gap-2">
