@@ -1,67 +1,58 @@
-import { withAuth } from 'next-auth/middleware'
 import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+import { getToken } from 'next-auth/jwt'
 
-export default withAuth(
-  function middleware(req) {
-    const token = req.nextauth.token
-    const { pathname } = req.nextUrl
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
 
-    // Rotas que requerem autenticação de admin
-    if (pathname.startsWith('/admin') && token?.role !== 'ADMIN') {
-      return NextResponse.redirect(new URL('/dashboard', req.url))
-    }
+  // Permitir todas as rotas públicas e de API
+  if (
+    pathname.startsWith('/api') ||
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/favicon.ico') ||
+    pathname.startsWith('/auth') ||
+    pathname === '/' ||
+    pathname.startsWith('/agricultura') ||
+    pathname.startsWith('/atividades') ||
+    pathname.startsWith('/receitas')
+  ) {
+    return NextResponse.next()
+  }
 
-    // Rotas que requerem autenticação básica
-    if (pathname.startsWith('/dashboard') && !token) {
-      return NextResponse.redirect(new URL('/auth/signin', req.url))
-    }
+  try {
+    // Obter o token JWT
+    const token = await getToken({ 
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET 
+    })
 
-    // Redirecionar usuários já autenticados da página de login
-    if (pathname === '/auth/signin' && token) {
-      if (token.role === 'ADMIN') {
-        return NextResponse.redirect(new URL('/admin/dashboard', req.url))
-      } else {
-        return NextResponse.redirect(new URL('/dashboard', req.url))
+    // Rotas protegidas admin
+    if (pathname.startsWith('/admin')) {
+      if (!token) {
+        return NextResponse.redirect(new URL('/auth/signin', request.url))
+      }
+      if (token.role !== 'ADMIN') {
+        return NextResponse.redirect(new URL('/dashboard', request.url))
       }
     }
 
-    // Redirecionar da página raiz baseado no papel do usuário
-    if (pathname === '/' && token) {
-      if (token.role === 'ADMIN') {
-        return NextResponse.redirect(new URL('/admin/dashboard', req.url))
-      } else {
-        return NextResponse.redirect(new URL('/dashboard', req.url))
+    // Rotas protegidas dashboard
+    if (pathname.startsWith('/dashboard')) {
+      if (!token) {
+        return NextResponse.redirect(new URL('/auth/signin', request.url))
       }
     }
 
     return NextResponse.next()
-  },
-  {
-    callbacks: {
-      authorized: ({ token, req }) => {
-        const { pathname } = req.nextUrl
-        
-        // Permitir acesso às rotas de auth sem token
-        if (pathname.startsWith('/auth')) {
-          return true
-        }
-
-        // Permitir acesso à página raiz
-        if (pathname === '/') {
-          return true
-        }
-
-        // Requerer token para outras rotas protegidas
-        if (pathname.startsWith('/dashboard') || pathname.startsWith('/admin')) {
-          return !!token
-        }
-
-        return true
-      }
-    }
+  } catch (error) {
+    console.error('Middleware error:', error)
+    // Em caso de erro, permitir acesso para evitar loop
+    return NextResponse.next()
   }
-)
+}
 
 export const config = {
-  matcher: ['/', '/dashboard/:path*', '/admin/:path*', '/auth/:path*']
+  matcher: [
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ]
 }
