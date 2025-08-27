@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXTAUTH_URL || 'http://localhost:3001'),
+  metadataBase: new URL(process.env.NEXTAUTH_URL || 'https://saberes-nextjs.vercel.app'),
   title: "Resgatando Saberes",
   description: "Sistema de gestão de conhecimentos tradicionais, agricultura sustentável e receitas saudáveis",
   keywords: "agricultura, receitas saudáveis, conhecimentos tradicionais, sustentabilidade",
