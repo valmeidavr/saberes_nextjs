@@ -9,8 +9,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { ChangePasswordDialog } from '@/components/change-password-dialog'
 import { 
   Menu, 
   X, 
@@ -21,7 +23,8 @@ import {
   UserCircle,
   LogOut,
   Settings,
-  GitBranch
+  Sprout,
+  Lock
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -31,6 +34,7 @@ interface NavigationProps {
 
 export function Navigation({ isAdmin = false }: NavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false)
   const pathname = usePathname()
   const { data: session } = useSession()
 
@@ -39,7 +43,7 @@ export function Navigation({ isAdmin = false }: NavigationProps) {
     { href: '/admin/usuarios', label: 'Usuários', icon: Users },
     { href: '/admin/atividades', label: 'Atividades', icon: Calendar },
     { href: '/admin/receitas', label: 'Receitas', icon: ChefHat },
-    { href: '/admin/participacao', label: 'Participação', icon: GitBranch },
+    { href: '/admin/agricultura', label: 'Agricultura', icon: Sprout },
   ]
 
   const userNavItems = [
@@ -95,10 +99,14 @@ export function Navigation({ isAdmin = false }: NavigationProps) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-slate-800 border-slate-700">
-                <DropdownMenuItem className="text-slate-300 focus:text-slate-100 focus:bg-slate-700">
-                  <Settings className="w-4 h-4 mr-2" />
-                  Configurações
+                <DropdownMenuItem 
+                  onClick={() => setIsChangePasswordOpen(true)}
+                  className="text-slate-300 focus:text-slate-100 focus:bg-slate-700"
+                >
+                  <Lock className="w-4 h-4 mr-2" />
+                  Alterar Senha
                 </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-slate-700" />
                 <DropdownMenuItem 
                   onClick={handleSignOut}
                   className="text-slate-300 focus:text-slate-100 focus:bg-slate-700"
@@ -147,6 +155,11 @@ export function Navigation({ isAdmin = false }: NavigationProps) {
           </div>
         )}
       </div>
+      
+      <ChangePasswordDialog 
+        open={isChangePasswordOpen} 
+        onOpenChange={setIsChangePasswordOpen} 
+      />
     </nav>
   )
 }

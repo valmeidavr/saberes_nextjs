@@ -57,8 +57,14 @@ export async function GET(request: NextRequest) {
       prisma.usuario.count({ where })
     ])
 
+    // Converter BigInt para string
+    const usuariosSerializados = usuarios.map(user => ({
+      ...user,
+      id: user.id.toString()
+    }))
+
     return NextResponse.json({
-      usuarios,
+      usuarios: usuariosSerializados,
       pagination: {
         page,
         limit,
@@ -137,7 +143,13 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    return NextResponse.json(usuario, { status: 201 })
+    // Converter BigInt para string
+    const usuarioSerializado = {
+      ...usuario,
+      id: usuario.id.toString()
+    }
+
+    return NextResponse.json(usuarioSerializado, { status: 201 })
   } catch (error) {
     console.error('Erro ao criar usuário:', error)
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })

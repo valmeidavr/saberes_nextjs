@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Navigation } from '@/components/navigation'
-import { Users, Calendar, ChefHat, GitBranch } from 'lucide-react'
+import { Users, Calendar, ChefHat, Sprout } from 'lucide-react'
 
 export default function AdminDashboard() {
   return (
@@ -51,12 +51,12 @@ export default function AdminDashboard() {
 
           <Card className="border-slate-200">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">Participações</CardTitle>
-              <GitBranch className="h-4 w-4 text-slate-600" />
+              <CardTitle className="text-sm font-medium text-slate-600">Agricultura</CardTitle>
+              <Sprout className="h-4 w-4 text-slate-600" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-slate-900">0</div>
-              <p className="text-xs text-slate-600">participações registradas</p>
+              <p className="text-xs text-slate-600">artigos sobre agricultura</p>
             </CardContent>
           </Card>
         </div>

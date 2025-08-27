@@ -42,6 +42,7 @@ model Atividade {
   hinicio   DateTime @db.Time
   hfim      DateTime @db.Time
   local     String   @db.VarChar(255)
+  foto      String?  @db.VarChar(500)
   status    Boolean
 
   participacoes Participacao[]
@@ -65,11 +66,24 @@ model Receita {
   nome         String  @db.VarChar(255)
   ingredientes String
   preparo      String
+  foto         String? @db.VarChar(500)
   idUsuario    BigInt  @map("id_usuario")
 
   usuario Usuario @relation(fields: [idUsuario], references: [id])
 
   @@map("receitas")
+}
+
+model Agricultura {
+  id        BigInt   @id @default(autoincrement())
+  titulo    String   @db.VarChar(255)
+  conteudo  String
+  foto      String?  @db.VarChar(500)
+  autor     String   @db.VarChar(255)
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("agricultura")
 }
 
 enum Perfil {

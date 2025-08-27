@@ -63,12 +63,13 @@ export default function UsuariosPage() {
   const [usuarios, setUsuarios] = useState<Usuario[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
-  const [statusFilter, setStatusFilter] = useState<string>('')
+  const [statusFilter, setStatusFilter] = useState<string>('all')
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingUser, setEditingUser] = useState<Usuario | null>(null)
   const [showPassword, setShowPassword] = useState(false)
+  const [cepLoading, setCepLoading] = useState(false)
   const [formData, setFormData] = useState<UsuarioFormData>({
     nome: '',
     email: '',
@@ -87,6 +88,12 @@ export default function UsuariosPage() {
   const { data: session } = useSession()
   const router = useRouter()
 
+  const ufs = [
+    'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS',
+    'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC',
+    'SP', 'SE', 'TO'
+  ]
+
   useEffect(() => {
     if (!session) return
     if (session.user?.role !== 'ADMIN') {
@@ -103,7 +110,7 @@ export default function UsuariosPage() {
         page: page.toString(),
         limit: '10',
         search,
-        ...(statusFilter && { status: statusFilter })
+        ...(statusFilter !== 'all' && { status: statusFilter })
       })
       
       const response = await fetch(`/api/usuarios?${params}`)
@@ -117,6 +124,38 @@ export default function UsuariosPage() {
       console.error('Erro ao carregar usuários:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchAddressByCep = async (cep: string) => {
+    if (cep.length !== 8) return
+    
+    setCepLoading(true)
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+      const data = await response.json()
+      
+      if (!data.erro) {
+        setFormData(prev => ({
+          ...prev,
+          bairro: data.bairro,
+          cidade: data.localidade,
+          uf: data.uf
+        }))
+      }
+    } catch (error) {
+      console.error('Erro ao buscar CEP:', error)
+    } finally {
+      setCepLoading(false)
+    }
+  }
+
+  const handleCepChange = (value: string) => {
+    const cleanCep = value.replace(/\D/g, '')
+    setFormData(prev => ({ ...prev, cep: cleanCep }))
+    
+    if (cleanCep.length === 8) {
+      fetchAddressByCep(cleanCep)
     }
   }
 
@@ -408,7 +447,7 @@ export default function UsuariosPage() {
                   <SelectValue placeholder="Filtrar por status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos</SelectItem>
+                  <SelectItem value="all">Todos</SelectItem>
                   <SelectItem value="true">Ativos</SelectItem>
                   <SelectItem value="false">Inativos</SelectItem>
                 </SelectContent>

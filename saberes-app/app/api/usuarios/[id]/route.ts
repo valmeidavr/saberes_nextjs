@@ -39,7 +39,13 @@ export async function GET(
       return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 })
     }
 
-    return NextResponse.json(usuario)
+    // Converter BigInt para string
+    const usuarioSerializado = {
+      ...usuario,
+      id: usuario.id.toString()
+    }
+
+    return NextResponse.json(usuarioSerializado)
   } catch (error) {
     console.error('Erro ao buscar usuário:', error)
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
@@ -135,7 +141,13 @@ export async function PUT(
       }
     })
 
-    return NextResponse.json(usuario)
+    // Converter BigInt para string  
+    const usuarioSerializado = {
+      ...usuario,
+      id: usuario.id.toString()
+    }
+
+    return NextResponse.json(usuarioSerializado)
   } catch (error) {
     console.error('Erro ao atualizar usuário:', error)
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
