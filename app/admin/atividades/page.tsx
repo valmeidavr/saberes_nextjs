@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Navigation } from '@/components/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -82,16 +82,7 @@ export default function AtividadesPage() {
   const { data: session } = useSession()
   const router = useRouter()
 
-  useEffect(() => {
-    if (!session) return
-    if (session.user?.role !== 'ADMIN') {
-      router.push('/dashboard')
-      return
-    }
-    fetchAtividades()
-  }, [session, search, statusFilter, page, router])
-
-  const fetchAtividades = async () => {
+  const fetchAtividades = useCallback(async () => {
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -113,7 +104,16 @@ export default function AtividadesPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [page, search, statusFilter])
+
+  useEffect(() => {
+    if (!session) return
+    if (session.user?.role !== 'ADMIN') {
+      router.push('/dashboard')
+      return
+    }
+    fetchAtividades()
+  }, [session, router, fetchAtividades])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

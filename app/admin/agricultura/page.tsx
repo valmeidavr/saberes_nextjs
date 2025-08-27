@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Navigation } from '@/components/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -70,16 +70,7 @@ export default function AgriculturaAdminPage() {
   const { data: session } = useSession()
   const router = useRouter()
 
-  useEffect(() => {
-    if (!session) return
-    if (session.user?.role !== 'ADMIN') {
-      router.push('/dashboard')
-      return
-    }
-    fetchArtigos()
-  }, [session, search, statusFilter, page, router])
-
-  const fetchArtigos = async () => {
+  const fetchArtigos = useCallback(async () => {
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -101,7 +92,16 @@ export default function AgriculturaAdminPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [page, search, statusFilter])
+
+  useEffect(() => {
+    if (!session) return
+    if (session.user?.role !== 'ADMIN') {
+      router.push('/dashboard')
+      return
+    }
+    fetchArtigos()
+  }, [session, router, fetchArtigos])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
