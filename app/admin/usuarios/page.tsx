@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Navigation } from '@/components/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -94,16 +94,7 @@ export default function UsuariosPage() {
     'SP', 'SE', 'TO'
   ]
 
-  useEffect(() => {
-    if (!session) return
-    if (session.user?.role !== 'ADMIN') {
-      router.push('/dashboard')
-      return
-    }
-    fetchUsuarios()
-  }, [session, search, statusFilter, page, router])
-
-  const fetchUsuarios = async () => {
+  const fetchUsuarios = useCallback(async () => {
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -125,7 +116,16 @@ export default function UsuariosPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [page, search, statusFilter])
+
+  useEffect(() => {
+    if (!session) return
+    if (session.user?.role !== 'ADMIN') {
+      router.push('/dashboard')
+      return
+    }
+    fetchUsuarios()
+  }, [session, router, fetchUsuarios])
 
   const fetchAddressByCep = async (cep: string) => {
     if (cep.length !== 8) return

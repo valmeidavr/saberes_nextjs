@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { Navigation } from '@/components/navigation'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -122,11 +123,12 @@ export default function AgriculturaPage() {
               >
                 <div className="md:flex">
                   {artigo.foto && (
-                    <div className="md:w-1/3 w-full h-48 md:h-auto overflow-hidden">
-                      <img 
+                    <div className="md:w-1/3 w-full h-48 md:h-auto overflow-hidden relative">
+                      <Image 
                         src={artigo.foto} 
                         alt={artigo.titulo}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
                   )}
@@ -200,11 +202,12 @@ export default function AgriculturaPage() {
               
               <div className="space-y-6">
                 {selectedArtigo.foto && (
-                  <div className="w-full h-80 overflow-hidden rounded-lg">
-                    <img 
+                  <div className="w-full h-80 overflow-hidden rounded-lg relative">
+                    <Image 
                       src={selectedArtigo.foto} 
                       alt={selectedArtigo.titulo}
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
                     />
                   </div>
                 )}
