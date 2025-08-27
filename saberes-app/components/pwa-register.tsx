@@ -6,7 +6,7 @@ import { Card, CardContent } from './ui/card'
 import { Download, X, RefreshCw } from 'lucide-react'
 
 export function PWARegister() {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
   const [showInstallPrompt, setShowInstallPrompt] = useState(false)
   const [showUpdatePrompt, setShowUpdatePrompt] = useState(false)
   const [isOffline, setIsOffline] = useState(false)
@@ -46,13 +46,13 @@ export function PWARegister() {
     }
 
     // Listen for beforeinstallprompt event (PWA install prompt)
-    const handleBeforeInstallPrompt = (e: any) => {
+    const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
       e.preventDefault()
       setDeferredPrompt(e)
       setShowInstallPrompt(true)
     }
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener)
 
     // Listen for app installed event
     window.addEventListener('appinstalled', () => {
@@ -64,7 +64,7 @@ export function PWARegister() {
     return () => {
       window.removeEventListener('online', handleOnline)
       window.removeEventListener('offline', handleOffline)
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener)
     }
   }, [])
 

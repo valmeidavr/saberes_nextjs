@@ -22,9 +22,9 @@ export async function GET(request: NextRequest) {
       AND: [
         search ? {
           OR: [
-            { nome: { contains: search, mode: 'insensitive' } },
-            { ingredientes: { contains: search, mode: 'insensitive' } },
-            { preparo: { contains: search, mode: 'insensitive' } }
+            { nome: { contains: search, mode: 'insensitive' as const } },
+            { ingredientes: { contains: search, mode: 'insensitive' as const } },
+            { preparo: { contains: search, mode: 'insensitive' as const } }
           ]
         } : {}
       ]

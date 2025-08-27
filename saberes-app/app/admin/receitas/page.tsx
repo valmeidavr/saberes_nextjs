@@ -112,7 +112,7 @@ export default function ReceitasPage() {
       const data = await response.json()
       
       if (response.ok) {
-        setUsuarios(data.usuarios.filter((u: any) => u.status))
+        setUsuarios(data.usuarios.filter((u: {status: boolean}) => u.status))
       }
     } catch (error) {
       console.error('Erro ao carregar usuários:', error)

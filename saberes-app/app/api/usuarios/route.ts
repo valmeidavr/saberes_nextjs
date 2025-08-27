@@ -24,9 +24,9 @@ export async function GET(request: NextRequest) {
       AND: [
         search ? {
           OR: [
-            { nome: { contains: search, mode: 'insensitive' } },
-            { email: { contains: search, mode: 'insensitive' } },
-            { cidade: { contains: search, mode: 'insensitive' } }
+            { nome: { contains: search, mode: 'insensitive' as const } },
+            { email: { contains: search, mode: 'insensitive' as const } },
+            { cidade: { contains: search, mode: 'insensitive' as const } }
           ]
         } : {},
         status !== null && status !== '' ? { status: status === 'true' } : {}
