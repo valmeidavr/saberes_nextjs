@@ -111,7 +111,7 @@ export async function PUT(
       sexo,
       cep,
       complemento,
-      numero: parseInt(numero),
+      numero: numero ? parseInt(numero) : 0,
       bairro,
       cidade,
       uf,

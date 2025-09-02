@@ -28,6 +28,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Plus, Search, Edit, Trash2, Eye, EyeOff } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { colors, primaryGradient, secondaryGradient } from '@/lib/colors'
 
 interface Usuario {
   id: string
@@ -166,6 +167,17 @@ export default function UsuariosPage() {
       const url = editingUser ? `/api/usuarios/${editingUser.id}` : '/api/usuarios'
       const method = editingUser ? 'PUT' : 'POST'
       
+      // Validação básica
+      if (!formData.nome || !formData.email) {
+        alert('Nome e email são obrigatórios')
+        return
+      }
+      
+      if (!editingUser && !formData.password) {
+        alert('Senha é obrigatória para novos usuários')
+        return
+      }
+      
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
@@ -176,13 +188,15 @@ export default function UsuariosPage() {
         setIsDialogOpen(false)
         resetForm()
         fetchUsuarios()
+        alert(editingUser ? 'Usuário atualizado com sucesso!' : 'Usuário criado com sucesso!')
       } else {
         const error = await response.json()
+        console.error('Erro da API:', error)
         alert(error.error || 'Erro ao salvar usuário')
       }
     } catch (error) {
       console.error('Erro:', error)
-      alert('Erro ao salvar usuário')
+      alert('Erro ao salvar usuário. Verifique o console para mais detalhes.')
     }
   }
 
@@ -245,19 +259,19 @@ export default function UsuariosPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen" style={{ background: primaryGradient }}>
       <Navigation isAdmin={true} />
       
       <main className="container mx-auto py-6 px-4">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Usuários</h1>
-            <p className="text-slate-600">Gerencie os usuários do sistema</p>
+            <h1 className="text-3xl font-bold text-white">Usuários</h1>
+            <p style={{ color: colors.secondary }}>Gerencie os usuários do sistema</p>
           </div>
           
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button onClick={resetForm} className="bg-slate-800 hover:bg-slate-700">
+              <Button onClick={resetForm} className="text-white" style={{ backgroundColor: colors.primary }}>
                 <Plus className="w-4 h-4 mr-2" />
                 Novo Usuário
               </Button>
@@ -353,7 +367,7 @@ export default function UsuariosPage() {
                         maxLength={8}
                         required
                       />
-                      {cepLoading && <span className="text-xs text-slate-500">Buscando endereço...</span>}
+                      {cepLoading && <span className="text-xs text-gray-500">Buscando endereço...</span>}
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="numero">Número</Label>
@@ -442,7 +456,7 @@ export default function UsuariosPage() {
           <CardContent>
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <Input
                   placeholder="Buscar usuários..."
                   value={search}

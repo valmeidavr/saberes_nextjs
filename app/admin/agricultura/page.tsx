@@ -28,6 +28,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea'
 import { Plus, Search, Edit, Trash2, Sprout, Calendar } from 'lucide-react'
 import { useSession } from 'next-auth/react'
+import { colors, primaryGradient, secondaryGradient } from '@/lib/colors'
 import { useRouter } from 'next/navigation'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
@@ -175,19 +176,19 @@ export default function AgriculturaAdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen" style={{ background: primaryGradient }}>
       <Navigation isAdmin={true} />
       
       <main className="container mx-auto py-6 px-4">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Agricultura</h1>
-            <p className="text-slate-600">Gerencie os artigos sobre agricultura e cultivo</p>
+            <h1 className="text-3xl font-bold text-white">Agricultura</h1>
+            <p style={{ color: colors.secondary }}>Gerencie os artigos sobre agricultura e cultivo</p>
           </div>
           
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button onClick={resetForm} className="bg-slate-800 hover:bg-slate-700">
+              <Button onClick={resetForm} className="text-white" style={{ backgroundColor: colors.primary }}>
                 <Plus className="w-4 h-4 mr-2" />
                 Novo Artigo
               </Button>
@@ -278,7 +279,7 @@ export default function AgriculturaAdminPage() {
           <CardContent>
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <Input
                   placeholder="Buscar artigos..."
                   value={search}

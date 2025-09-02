@@ -20,6 +20,7 @@ import {
 import { format, isSameDay, parseISO } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Calendar as CalendarIcon, Clock, MapPin, Users, CheckCircle, XCircle } from 'lucide-react'
+import { colors, primaryGradient, secondaryGradient } from '@/lib/colors'
 
 interface Atividade {
   id: string
@@ -138,7 +139,7 @@ export default function AtividadesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen" style={{ background: primaryGradient }}>
       <Navigation isAdmin={false} />
       
       {/* Toast Notification */}
@@ -161,15 +162,15 @@ export default function AtividadesPage() {
       
       <main className="container mx-auto py-6 px-4">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Calendário de Atividades</h1>
-          <p className="text-slate-600">Participe das atividades da comunidade</p>
+          <h1 className="text-3xl font-bold text-white mb-2">Calendário de Atividades</h1>
+          <p style={{ color: colors.secondary }}>Participe das atividades da comunidade</p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CalendarIcon className="h-5 w-5" />
+              <CardTitle className="flex items-center gap-2" style={{ color: colors.primary }}>
+                <CalendarIcon className="h-5 w-5" style={{ color: colors.secondary }} />
                 Selecione uma Data
               </CardTitle>
               <CardDescription>
@@ -188,7 +189,7 @@ export default function AtividadesPage() {
                 }}
                 modifiersStyles={{
                   hasAtividades: { 
-                    backgroundColor: '#f59e0b', 
+                    backgroundColor: colors.secondary, 
                     color: 'white',
                     fontWeight: 'bold'
                   }
@@ -199,7 +200,7 @@ export default function AtividadesPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>
+              <CardTitle style={{ color: colors.primary }}>
                 Atividades para {format(selectedDate, 'dd/MM/yyyy', { locale: ptBR })}
               </CardTitle>
               <CardDescription>
@@ -215,10 +216,10 @@ export default function AtividadesPage() {
               ) : selectedDateAtividades.length > 0 ? (
                 <div className="space-y-4">
                   {selectedDateAtividades.map((atividade) => (
-                    <Card key={atividade.id} className="border-l-4 border-l-amber-500">
+                    <Card key={atividade.id} className="border-l-4" style={{ borderLeftColor: colors.secondary }}>
                       <CardContent className="pt-4">
                         <div className="flex justify-between items-start mb-2">
-                          <h3 className="font-semibold text-lg">{atividade.nome}</h3>
+                          <h3 className="font-semibold text-lg" style={{ color: colors.primary }}>{atividade.nome}</h3>
                           {atividade.isParticipating && (
                             <Badge variant="default" className="bg-green-600">
                               Inscrito
@@ -237,22 +238,22 @@ export default function AtividadesPage() {
                         )}
                         
                         <div className="space-y-2 mb-4">
-                          <div className="flex items-center gap-2 text-slate-600">
+                          <div className="flex items-center gap-2 text-gray-600">
                             <Clock className="h-4 w-4" />
                             {format(new Date(atividade.hinicio), 'HH:mm')} - {format(new Date(atividade.hfim), 'HH:mm')}
                           </div>
-                          <div className="flex items-center gap-2 text-slate-600">
+                          <div className="flex items-center gap-2 text-gray-600">
                             <MapPin className="h-4 w-4" />
                             {atividade.local}
                           </div>
-                          <div className="flex items-center gap-2 text-slate-600">
+                          <div className="flex items-center gap-2 text-gray-600">
                             <Users className="h-4 w-4" />
                             {atividade.participacoes?.length || 0} participantes
                           </div>
                         </div>
                         
                         {atividade.descricao && (
-                          <p className="text-slate-600 mb-4 line-clamp-2">
+                          <p className="text-gray-600 mb-4 line-clamp-2">
                             {atividade.descricao}
                           </p>
                         )}
@@ -262,7 +263,8 @@ export default function AtividadesPage() {
                             setSelectedAtividade(atividade)
                             setIsDialogOpen(true)
                           }}
-                          className="w-full bg-amber-500 hover:bg-amber-600 text-slate-900"
+                          className="w-full text-white"
+                          style={{ backgroundColor: colors.secondary }}
                         >
                           Ver Detalhes
                         </Button>
@@ -271,8 +273,8 @@ export default function AtividadesPage() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8 text-slate-500">
-                  <CalendarIcon className="h-12 w-12 mx-auto mb-4 text-slate-300" />
+                <div className="text-center py-8 text-white opacity-80">
+                  <CalendarIcon className="h-12 w-12 mx-auto mb-4" style={{ color: colors.secondary, opacity: 0.5 }} />
                   <p>Nenhuma atividade programada para esta data</p>
                   <p className="text-sm mt-2">Selecione outra data no calendário</p>
                 </div>
@@ -285,7 +287,7 @@ export default function AtividadesPage() {
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
-                <DialogTitle className="text-2xl">{selectedAtividade.nome}</DialogTitle>
+                <DialogTitle className="text-2xl" style={{ color: colors.primary }}>{selectedAtividade.nome}</DialogTitle>
                 <DialogDescription>
                   {format(parseISO(selectedAtividade.data), 'dd/MM/yyyy', { locale: ptBR })} • {format(new Date(selectedAtividade.hinicio), 'HH:mm')} - {format(new Date(selectedAtividade.hfim), 'HH:mm')}
                 </DialogDescription>
@@ -304,19 +306,19 @@ export default function AtividadesPage() {
                 
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-slate-400" />
+                    <MapPin className="h-4 w-4" style={{ color: colors.secondary }} />
                     <span>{selectedAtividade.local}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-slate-400" />
+                    <Users className="h-4 w-4" style={{ color: colors.secondary }} />
                     <span>{selectedAtividade.participacoes?.length || 0} participantes</span>
                   </div>
                 </div>
                 
                 {selectedAtividade.descricao && (
                   <div>
-                    <h4 className="font-semibold mb-2">Descrição</h4>
-                    <p className="text-slate-600 leading-relaxed">
+                    <h4 className="font-semibold mb-2" style={{ color: colors.primary }}>Descrição</h4>
+                    <p className="text-gray-600 leading-relaxed">
                       {selectedAtividade.descricao}
                     </p>
                   </div>
@@ -334,7 +336,8 @@ export default function AtividadesPage() {
                 ) : (
                   <Button 
                     onClick={() => handleParticipate(selectedAtividade.id)}
-                    className="bg-amber-500 hover:bg-amber-600 text-slate-900"
+                    className="text-white"
+                    style={{ backgroundColor: colors.secondary }}
                   >
                     Participar da Atividade
                   </Button>

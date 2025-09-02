@@ -18,6 +18,7 @@ import {
 import { Search, Sprout, User, Calendar } from 'lucide-react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { colors, primaryGradient, secondaryGradient } from '@/lib/colors'
 
 interface Agricultura {
   id: string
@@ -84,18 +85,18 @@ export default function AgriculturaPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen" style={{ background: primaryGradient }}>
       <Navigation isAdmin={false} />
       
       <main className="container mx-auto py-6 px-4">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Agricultura & Cultivo</h1>
-          <p className="text-slate-600">Aprenda técnicas e dicas de cultivo sustentável</p>
+          <h1 className="text-3xl font-bold text-white mb-2">Agricultura & Cultivo</h1>
+          <p style={{ color: colors.secondary }}>Aprenda técnicas e dicas de cultivo sustentável</p>
         </div>
 
         <div className="mb-6">
           <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
               placeholder="Buscar artigos..."
               value={search}
@@ -107,15 +108,16 @@ export default function AgriculturaPage() {
 
         {loading ? (
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto"></div>
-            <p className="mt-4 text-slate-600">Carregando artigos...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto" style={{ borderColor: colors.secondary }}></div>
+            <p className="mt-4 text-white">Carregando artigos...</p>
           </div>
         ) : filteredArtigos.length > 0 ? (
           <div className="space-y-6">
             {filteredArtigos.map((artigo) => (
               <Card 
                 key={artigo.id}
-                className="group hover:shadow-lg transition-all duration-300 cursor-pointer border-l-4 border-l-green-500 bg-white"
+                className="group hover:shadow-lg transition-all duration-300 cursor-pointer border-l-4 bg-white"
+                style={{ borderLeftColor: colors.secondary }}
                 onClick={() => {
                   setSelectedArtigo(artigo)
                   setIsDialogOpen(true)
@@ -135,12 +137,12 @@ export default function AgriculturaPage() {
                   <div className={`${artigo.foto ? 'md:w-2/3' : 'w-full'} p-6`}>
                     <CardHeader className="p-0 mb-4">
                       <div className="flex items-start justify-between mb-2">
-                        <CardTitle className="text-xl group-hover:text-green-600 transition-colors line-clamp-2">
+                        <CardTitle className="text-xl transition-colors line-clamp-2" style={{ color: colors.primary }}>
                           {artigo.titulo}
                         </CardTitle>
-                        <Sprout className="h-5 w-5 text-green-500 flex-shrink-0 ml-2" />
+                        <Sprout className="h-5 w-5 flex-shrink-0 ml-2" style={{ color: colors.secondary }} />
                       </div>
-                      <div className="flex items-center gap-4 text-sm text-slate-600">
+                      <div className="flex items-center gap-4 text-sm text-gray-600">
                         <div className="flex items-center gap-1">
                           <User className="h-4 w-4" />
                           <Badge variant="outline" className="text-xs">
@@ -154,11 +156,11 @@ export default function AgriculturaPage() {
                       </div>
                     </CardHeader>
                     <CardContent className="p-0">
-                      <p className="text-slate-600 line-clamp-3 leading-relaxed">
+                      <p className="text-gray-600 line-clamp-3 leading-relaxed">
                         {artigo.conteudo}
                       </p>
                       <div className="mt-4">
-                        <span className="text-sm text-green-600 font-medium group-hover:text-green-700">
+                        <span className="text-sm font-medium transition-colors" style={{ color: colors.secondary }}>
                           Clique para ler mais →
                         </span>
                       </div>
@@ -170,11 +172,11 @@ export default function AgriculturaPage() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <Sprout className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-xl font-medium text-slate-900 mb-2">
+            <Sprout className="h-16 w-16 mx-auto mb-4" style={{ color: colors.secondary, opacity: 0.5 }} />
+            <h3 className="text-xl font-medium text-white mb-2">
               {search ? 'Nenhum artigo encontrado' : 'Nenhum artigo disponível'}
             </h3>
-            <p className="text-slate-600">
+            <p className="text-white opacity-80">
               {search ? 'Tente buscar por outros termos' : 'Os artigos sobre agricultura aparecerão aqui quando forem publicados'}
             </p>
           </div>
@@ -184,8 +186,8 @@ export default function AgriculturaPage() {
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle className="text-2xl flex items-center gap-2">
-                  <Sprout className="h-6 w-6 text-green-500" />
+                <DialogTitle className="text-2xl flex items-center gap-2" style={{ color: colors.primary }}>
+                  <Sprout className="h-6 w-6" style={{ color: colors.secondary }} />
                   {selectedArtigo.titulo}
                 </DialogTitle>
                 <DialogDescription className="flex items-center gap-4">
@@ -212,8 +214,8 @@ export default function AgriculturaPage() {
                   </div>
                 )}
                 
-                <div className="bg-green-50 p-6 rounded-lg border border-green-200">
-                  <div className="prose max-w-none text-slate-700 leading-relaxed">
+                <div className="p-6 rounded-lg" style={{ backgroundColor: 'rgba(238, 183, 0, 0.1)', border: `1px solid ${colors.secondary}` }}>
+                  <div className="prose max-w-none leading-relaxed" style={{ color: colors.primary }}>
                     {selectedArtigo.conteudo.split('\n').map((paragraph, index) => (
                       <p key={index} className="mb-4 last:mb-0">
                         {paragraph}
@@ -222,7 +224,7 @@ export default function AgriculturaPage() {
                   </div>
                 </div>
                 
-                <div className="flex items-center justify-between text-sm text-slate-500 border-t pt-4">
+                <div className="flex items-center justify-between text-sm text-gray-500 border-t pt-4">
                   <span>Artigo sobre agricultura sustentável</span>
                   <span>Compartilhe o conhecimento! 🌱</span>
                 </div>

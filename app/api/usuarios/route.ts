@@ -121,11 +121,11 @@ export async function POST(request: NextRequest) {
         sexo,
         cep,
         complemento,
-        numero: parseInt(numero),
+        numero: numero ? parseInt(numero) : 0,
         bairro,
         cidade,
         uf,
-        status
+        status: status !== undefined ? status : true
       },
       select: {
         id: true,

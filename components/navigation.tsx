@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
+import { colors, primaryGradient } from '@/lib/colors'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -58,11 +59,11 @@ export function Navigation({ isAdmin = false }: NavigationProps) {
   }
 
   return (
-    <nav className="bg-slate-800/95 backdrop-blur border-b border-slate-700">
+    <nav style={{ background: primaryGradient }} className="backdrop-blur border-b border-gray-200">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-8">
-            <Link href={isAdmin ? '/admin/dashboard' : '/dashboard'} className="text-xl font-bold text-slate-100">
+            <Link href={isAdmin ? '/admin/dashboard' : '/dashboard'} className="text-xl font-bold" style={{ color: colors.secondary }}>
               Saberes
             </Link>
             
@@ -75,10 +76,10 @@ export function Navigation({ isAdmin = false }: NavigationProps) {
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      "flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                      "flex items-center px-3 py-2 rounded-md text-sm font-medium transition-all",
                       isActive
-                        ? "bg-slate-700 text-slate-100"
-                        : "text-slate-300 hover:text-slate-100 hover:bg-slate-700/50"
+                        ? "text-white"
+                        : "text-gray-200 hover:text-white hover:bg-white/10"
                     )}
                   >
                     <Icon className="w-4 h-4 mr-2" />
@@ -92,23 +93,23 @@ export function Navigation({ isAdmin = false }: NavigationProps) {
           <div className="flex items-center space-x-4">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center space-x-2 text-slate-300 hover:text-slate-100">
+                <Button variant="ghost" className="flex items-center space-x-2 text-gray-200 hover:text-white">
                   <UserCircle className="w-5 h-5" />
                   <span className="hidden sm:block">{session?.user?.name}</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-slate-800 border-slate-700">
+              <DropdownMenuContent align="end" className="bg-white border-gray-200">
                 <DropdownMenuItem 
                   onClick={() => setIsChangePasswordOpen(true)}
-                  className="text-slate-300 focus:text-slate-100 focus:bg-slate-700"
+                  className="focus:bg-gray-100" style={{ color: colors.primary }}
                 >
                   <Lock className="w-4 h-4 mr-2" />
                   Alterar Senha
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-slate-700" />
+                <DropdownMenuSeparator className="bg-gray-200" />
                 <DropdownMenuItem 
                   onClick={handleSignOut}
-                  className="text-slate-300 focus:text-slate-100 focus:bg-slate-700"
+                  className="focus:bg-gray-100" style={{ color: colors.primary }}
                 >
                   <LogOut className="w-4 h-4 mr-2" />
                   Sair
@@ -119,7 +120,7 @@ export function Navigation({ isAdmin = false }: NavigationProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden text-slate-300 hover:text-slate-100"
+              className="md:hidden text-gray-200 hover:text-white"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -128,7 +129,7 @@ export function Navigation({ isAdmin = false }: NavigationProps) {
         </div>
 
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-700">
+          <div className="md:hidden border-t border-white/20">
             <div className="py-2 space-y-1">
               {navItems.map((item) => {
                 const Icon = item.icon
@@ -138,10 +139,10 @@ export function Navigation({ isAdmin = false }: NavigationProps) {
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      "flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                      "flex items-center px-3 py-2 rounded-md text-sm font-medium transition-all",
                       isActive
-                        ? "bg-slate-700 text-slate-100"
-                        : "text-slate-300 hover:text-slate-100 hover:bg-slate-700/50"
+                        ? "text-white"
+                        : "text-gray-200 hover:text-white hover:bg-white/10"
                     )}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
