@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { signIn, getSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -40,7 +41,7 @@ export default function SignInPage() {
           router.push('/dashboard')
         }
       }
-    } catch (error) {
+    } catch {
       setError('Erro ao fazer login')
     } finally {
       setIsLoading(false)
@@ -48,28 +49,34 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
-      <Card className="w-full max-w-md shadow-2xl border-slate-700 bg-slate-800/50 backdrop-blur">
+    <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgb(41,41,68) 0%, rgb(41,41,68) 50%, rgb(30,30,51) 100%)' }}>
+      <Card className="w-full max-w-md shadow-2xl border-0 bg-white/95 backdrop-blur">
         <CardHeader className="text-center space-y-2">
-          <div className="mx-auto w-16 h-16 bg-gradient-to-br from-slate-600 to-slate-700 rounded-full flex items-center justify-center mb-4">
-            <Lock className="h-8 w-8 text-slate-200" />
+          <div className="mx-auto mb-4">
+            <Image 
+              src="/logo.jpg" 
+              alt="Logo Saberes" 
+              width={120} 
+              height={120} 
+              className="rounded-full shadow-lg"
+            />
           </div>
-          <CardTitle className="text-2xl font-bold text-slate-100">Bem-vindo ao Saberes</CardTitle>
-          <CardDescription className="text-slate-300">
+          <CardTitle className="text-2xl font-bold" style={{ color: 'rgb(41,41,68)' }}>Bem-vindo ao Saberes</CardTitle>
+          <CardDescription className="text-gray-600">
             Faça login para acessar o sistema
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             {error && (
-              <div className="p-3 text-sm text-red-300 bg-red-900/20 border border-red-800 rounded">
+              <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded">
                 {error}
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-slate-200">Email</Label>
+              <Label htmlFor="email" style={{ color: 'rgb(41,41,68)' }}>Email</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" style={{ color: 'rgb(238,183,0)' }} />
                 <Input
                   id="email"
                   type="email"
@@ -77,14 +84,14 @@ export default function SignInPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="pl-10 bg-slate-700/50 border-slate-600 text-slate-100 placeholder:text-slate-400 focus:border-slate-500"
+                  className="pl-10 bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 focus:border-yellow-400"
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-slate-200">Senha</Label>
+              <Label htmlFor="password" style={{ color: 'rgb(41,41,68)' }}>Senha</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" style={{ color: 'rgb(238,183,0)' }} />
                 <Input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
@@ -92,12 +99,12 @@ export default function SignInPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="pl-10 pr-10 bg-slate-700/50 border-slate-600 text-slate-100 placeholder:text-slate-400 focus:border-slate-500"
+                  className="pl-10 pr-10 bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 focus:border-yellow-400"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-200"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-700"
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -107,7 +114,8 @@ export default function SignInPage() {
           <CardFooter className="flex flex-col space-y-4">
             <Button 
               type="submit" 
-              className="w-full bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-500 hover:to-slate-600 text-white" 
+              className="w-full text-white hover:opacity-90 transition-opacity"
+              style={{ background: 'linear-gradient(135deg, rgb(238,183,0) 0%, rgb(255,200,20) 100%)' }} 
               disabled={isLoading}
             >
               {isLoading ? 'Entrando...' : 'Entrar'}
@@ -115,7 +123,10 @@ export default function SignInPage() {
             <div className="text-center">
               <Link 
                 href="/auth/forgot-password" 
-                className="text-sm text-slate-400 hover:text-slate-200 transition-colors"
+                className="text-sm transition-colors"
+                style={{ color: 'rgb(41,41,68)' }}
+                onMouseEnter={(e) => e.currentTarget.style.color = 'rgb(238,183,0)'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'rgb(41,41,68)'}
               >
                 Esqueci minha senha
               </Link>

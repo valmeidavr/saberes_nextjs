@@ -23,7 +23,7 @@ export default function ForgotPasswordPage() {
       // Simulação de envio de email - implementar posteriormente
       await new Promise(resolve => setTimeout(resolve, 1500))
       setIsEmailSent(true)
-    } catch (error) {
+    } catch {
       setError('Erro ao enviar email de recuperação')
     } finally {
       setIsLoading(false)

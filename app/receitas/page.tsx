@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { Navigation } from '@/components/navigation'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -119,11 +120,12 @@ export default function ReceitasPage() {
               >
                 <CardHeader className="pb-3">
                   {receita.foto && (
-                    <div className="w-full h-48 mb-4 overflow-hidden rounded-lg">
-                      <img 
+                    <div className="w-full h-48 mb-4 overflow-hidden rounded-lg relative">
+                      <Image 
                         src={receita.foto} 
                         alt={receita.nome}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
                   )}
@@ -187,11 +189,12 @@ export default function ReceitasPage() {
               
               <div className="space-y-6">
                 {selectedReceita.foto && (
-                  <div className="w-full h-64 overflow-hidden rounded-lg">
-                    <img 
+                  <div className="w-full h-64 overflow-hidden rounded-lg relative">
+                    <Image 
                       src={selectedReceita.foto} 
                       alt={selectedReceita.nome}
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
                     />
                   </div>
                 )}

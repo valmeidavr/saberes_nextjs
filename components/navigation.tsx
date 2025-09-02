@@ -22,7 +22,6 @@ import {
   ChefHat, 
   UserCircle,
   LogOut,
-  Settings,
   Sprout,
   Lock
 } from 'lucide-react'

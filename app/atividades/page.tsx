@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { Navigation } from '@/components/navigation'
 import { Calendar } from '@/components/ui/calendar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -226,9 +227,11 @@ export default function AtividadesPage() {
                         </div>
                         
                         {atividade.foto && (
-                          <img 
+                          <Image 
                             src={atividade.foto} 
                             alt={atividade.nome}
+                            width={400}
+                            height={160}
                             className="w-full h-40 object-cover rounded mb-3"
                           />
                         )}
@@ -290,9 +293,11 @@ export default function AtividadesPage() {
               
               <div className="space-y-4">
                 {selectedAtividade.foto && (
-                  <img 
+                  <Image 
                     src={selectedAtividade.foto} 
                     alt={selectedAtividade.nome}
+                    width={600}
+                    height={256}
                     className="w-full h-64 object-cover rounded"
                   />
                 )}
