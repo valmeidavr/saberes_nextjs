@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { getToken } from 'next-auth/jwt'
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -26,14 +27,11 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    // Importar getToken apenas quando necessário
-    const { getToken } = await import('next-auth/jwt')
-    
     // Obter o token com tratamento de erro
     const token = await getToken({ 
       req: request,
-      secret: process.env.NEXTAUTH_SECRET || 'saberes*()'
-    }).catch(() => null)
+      secret: process.env.NEXTAUTH_SECRET
+    })
 
     // Rotas protegidas admin
     if (pathname.startsWith('/admin')) {
