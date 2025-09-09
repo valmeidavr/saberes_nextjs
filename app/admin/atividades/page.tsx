@@ -26,7 +26,7 @@ import {
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { Plus, Search, Edit, Trash2, Calendar, Clock, MapPin } from 'lucide-react'
+import { Plus, Search, Edit, Trash2, Calendar, Clock, MapPin, Loader2 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { colors, primaryGradient, secondaryGradient } from '@/lib/colors'
 import { useRouter } from 'next/navigation'
@@ -68,7 +68,9 @@ export default function AtividadesPage() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [editingAtividade, setEditingAtividade] = useState<Atividade | null>(null)
+  const [deletingAtividade, setDeletingAtividade] = useState<Atividade | null>(null)
   const [formData, setFormData] = useState<AtividadeFormData>({
     nome: '',
     descricao: '',
@@ -82,6 +84,54 @@ export default function AtividadesPage() {
   
   const { data: session } = useSession()
   const router = useRouter()
+
+  // Função para formatar data sem problemas de timezone
+  const formatDateForInput = (dateString: string): string => {
+    // Se a data já está no formato ISO, extrair apenas a parte da data
+    if (dateString.includes('T')) {
+      return dateString.split('T')[0]
+    }
+    // Se é uma string de data simples, usar diretamente
+    const date = new Date(dateString + 'T00:00:00.000Z')
+    return date.toISOString().split('T')[0]
+  }
+
+  // Função para criar Date seguro para exibição
+  const createSafeDate = (dateString: string): Date => {
+    try {
+      const date = new Date(dateString)
+      if (isNaN(date.getTime())) {
+        // Se não conseguir parsear, tentar formato ISO
+        const isoMatch = dateString.match(/(\d{4})-(\d{2})-(\d{2})/)
+        if (isoMatch) {
+          return new Date(`${isoMatch[1]}-${isoMatch[2]}-${isoMatch[3]}T00:00:00`)
+        }
+        return new Date()
+      }
+      // Para exibição de data, queremos sempre mostrar a data local
+      return new Date(date.getTime() + date.getTimezoneOffset() * 60000)
+    } catch {
+      return new Date()
+    }
+  }
+
+  // Função para criar Date seguro para horários
+  const createSafeTimeDate = (timeString: string): Date => {
+    try {
+      const date = new Date(timeString)
+      if (isNaN(date.getTime())) {
+        // Se não conseguir parsear, tentar extrair apenas a hora
+        const timeMatch = timeString.match(/(\d{2}):(\d{2})/)
+        if (timeMatch) {
+          return new Date(`1970-01-01T${timeMatch[1]}:${timeMatch[2]}:00`)
+        }
+        return new Date(`1970-01-01T00:00:00`)
+      }
+      return date
+    } catch {
+      return new Date(`1970-01-01T00:00:00`)
+    }
+  }
 
   const fetchAtividades = useCallback(async () => {
     try {
@@ -145,9 +195,9 @@ export default function AtividadesPage() {
 
   const handleEdit = (atividade: Atividade) => {
     setEditingAtividade(atividade)
-    const dataFormatada = format(new Date(atividade.data), 'yyyy-MM-dd')
-    const inicioFormatado = format(new Date(atividade.hinicio), 'HH:mm')
-    const fimFormatado = format(new Date(atividade.hfim), 'HH:mm')
+    const dataFormatada = atividade.data ? formatDateForInput(atividade.data) : ''
+    const inicioFormatado = atividade.hinicio ? format(createSafeTimeDate(atividade.hinicio), 'HH:mm') : ''
+    const fimFormatado = atividade.hfim ? format(createSafeTimeDate(atividade.hfim), 'HH:mm') : ''
     
     setFormData({
       nome: atividade.nome,
@@ -162,13 +212,20 @@ export default function AtividadesPage() {
     setIsDialogOpen(true)
   }
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Tem certeza que deseja excluir esta atividade?')) return
+  const handleDelete = (atividade: Atividade) => {
+    setDeletingAtividade(atividade)
+    setIsDeleteDialogOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    if (!deletingAtividade) return
     
     try {
-      const response = await fetch(`/api/atividades/${id}`, { method: 'DELETE' })
+      const response = await fetch(`/api/atividades/${deletingAtividade.id}`, { method: 'DELETE' })
       
       if (response.ok) {
+        setIsDeleteDialogOpen(false)
+        setDeletingAtividade(null)
         fetchAtividades()
       } else {
         alert('Erro ao excluir atividade')
@@ -321,6 +378,34 @@ export default function AtividadesPage() {
           </Dialog>
         </div>
 
+        {/* Diálogo de confirmação de exclusão */}
+        <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle className="text-red-600">Excluir Atividade</DialogTitle>
+              <DialogDescription>
+                Você tem certeza que deseja excluir a atividade{' '}
+                <span className="font-semibold">{deletingAtividade?.nome}</span>?
+                Esta ação não pode ser desfeita.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="gap-2 sm:gap-0">
+              <Button
+                variant="outline"
+                onClick={() => setIsDeleteDialogOpen(false)}
+              >
+                Cancelar
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={confirmDelete}
+              >
+                Sim, excluir
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
         <Card>
           <CardHeader>
             <CardTitle>Lista de Atividades</CardTitle>
@@ -352,7 +437,9 @@ export default function AtividadesPage() {
             </div>
 
             {loading ? (
-              <div className="text-center py-8">Carregando...</div>
+              <div className="flex justify-center items-center py-8">
+                <Loader2 className="h-6 w-6 animate-spin text-slate-600" />
+              </div>
             ) : (
               <>
                 <div className="overflow-x-auto">
@@ -383,11 +470,14 @@ export default function AtividadesPage() {
                           <TableCell>
                             <div className="flex items-center gap-2 text-sm">
                               <Calendar className="h-4 w-4 text-slate-400" />
-                              {format(new Date(atividade.data), 'dd/MM/yyyy', { locale: ptBR })}
+                              {atividade.data ? format(createSafeDate(atividade.data), 'dd/MM/yyyy', { locale: ptBR }) : 'Data inválida'}
                             </div>
                             <div className="flex items-center gap-2 text-sm text-slate-500">
                               <Clock className="h-4 w-4" />
-                              {format(new Date(atividade.hinicio), 'HH:mm')} - {format(new Date(atividade.hfim), 'HH:mm')}
+                              {atividade.hinicio && atividade.hfim ? 
+                                `${format(createSafeTimeDate(atividade.hinicio), 'HH:mm')} - ${format(createSafeTimeDate(atividade.hfim), 'HH:mm')}` : 
+                                'Horário inválido'
+                              }
                             </div>
                           </TableCell>
                           <TableCell>
@@ -418,7 +508,7 @@ export default function AtividadesPage() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => handleDelete(atividade.id)}
+                                onClick={() => handleDelete(atividade)}
                                 className="text-red-600 hover:text-red-700"
                               >
                                 <Trash2 className="h-4 w-4" />

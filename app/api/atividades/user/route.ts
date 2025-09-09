@@ -25,7 +25,7 @@ export async function GET() {
       orderBy: { data: 'asc' }
     })
 
-    // Converter BigInt para string e verificar participação do usuário
+    // Converter BigInt para string, formatar datas e verificar participação do usuário
     const atividadesSerializadas = atividades.map(atividade => {
       const isParticipating = atividade.participacoes.some(
         p => p.idUsuario.toString() === session.user?.id
@@ -34,6 +34,9 @@ export async function GET() {
       return {
         ...atividade,
         id: atividade.id.toString(),
+        data: atividade.data.toISOString(),
+        hinicio: atividade.hinicio.toISOString(),
+        hfim: atividade.hfim.toISOString(),
         participacoes: atividade.participacoes.map(p => ({
           ...p,
           id: p.id.toString(),

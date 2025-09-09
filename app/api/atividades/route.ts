@@ -51,10 +51,13 @@ export async function GET(request: NextRequest) {
       prisma.atividade.count({ where })
     ])
 
-    // Converter BigInt para string
+    // Converter BigInt para string e formatar datas
     const atividadesSerializadas = atividades.map(atividade => ({
       ...atividade,
       id: atividade.id.toString(),
+      data: atividade.data.toISOString(),
+      hinicio: atividade.hinicio.toISOString(),
+      hfim: atividade.hfim.toISOString(),
       participacoes: atividade.participacoes.map(p => ({
         ...p,
         id: p.id.toString(),
@@ -102,19 +105,22 @@ export async function POST(request: NextRequest) {
       data: {
         nome,
         descricao,
-        data: new Date(dataAtividade),
-        hinicio: new Date(`1970-01-01T${hinicio}:00.000Z`),
-        hfim: new Date(`1970-01-01T${hfim}:00.000Z`),
+        data: new Date(dataAtividade + 'T00:00:00.000Z'),
+        hinicio: new Date(`1970-01-01T${hinicio}:00`),
+        hfim: new Date(`1970-01-01T${hfim}:00`),
         local,
         foto,
         status
       }
     })
 
-    // Converter BigInt para string
+    // Converter BigInt para string e formatar datas
     const atividadeSerializada = {
       ...atividade,
-      id: atividade.id.toString()
+      id: atividade.id.toString(),
+      data: atividade.data.toISOString(),
+      hinicio: atividade.hinicio.toISOString(),
+      hfim: atividade.hfim.toISOString()
     }
 
     return NextResponse.json(atividadeSerializada, { status: 201 })

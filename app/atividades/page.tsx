@@ -17,10 +17,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { format, isSameDay, parseISO } from 'date-fns'
+import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Calendar as CalendarIcon, Clock, MapPin, Users, CheckCircle, XCircle } from 'lucide-react'
-import { colors, primaryGradient, secondaryGradient } from '@/lib/colors'
+import { colors, primaryGradient } from '@/lib/colors'
 
 interface Atividade {
   id: string
@@ -50,6 +50,37 @@ export default function AtividadesPage() {
   const { data: session } = useSession()
   const router = useRouter()
 
+  // Função para criar Date seguro para exibição (mesma do admin)
+  const createSafeDate = (dateString: string): Date => {
+    try {
+      const date = new Date(dateString)
+      if (isNaN(date.getTime())) {
+        // Se não conseguir parsear, tentar formato ISO
+        const isoMatch = dateString.match(/(\d{4})-(\d{2})-(\d{2})/)
+        if (isoMatch) {
+          return new Date(`${isoMatch[1]}-${isoMatch[2]}-${isoMatch[3]}T00:00:00`)
+        }
+        return new Date()
+      }
+      // Para exibição de data, queremos sempre mostrar a data local
+      return new Date(date.getTime() + date.getTimezoneOffset() * 60000)
+    } catch {
+      return new Date()
+    }
+  }
+
+  // Função para criar data UTC para comparação
+  const createUTCDate = (dateString: string): Date => {
+    const cleanDate = dateString.includes('T') ? dateString.split('T')[0] : dateString
+    const [year, month, day] = cleanDate.split('-').map(Number)
+    return new Date(Date.UTC(year, month - 1, day))
+  }
+
+  // Função para normalizar data local para comparação
+  const normalizeDate = (date: Date): Date => {
+    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
+  }
+
   useEffect(() => {
     if (!session) return
     if (session.user?.role === 'ADMIN') {
@@ -62,7 +93,11 @@ export default function AtividadesPage() {
   const fetchAtividades = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/atividades/user')
+      // Cache busting para garantir dados frescos
+      const timestamp = new Date().getTime()
+      const response = await fetch(`/api/atividades/user?t=${timestamp}`, {
+        cache: 'no-store'
+      })
       const data = await response.json()
       
       if (response.ok) {
@@ -123,13 +158,23 @@ export default function AtividadesPage() {
   }
 
   const getAtividadesForDate = (date: Date) => {
-    return atividades.filter(atividade => 
-      atividade.status && isSameDay(parseISO(atividade.data), date)
-    )
+    return atividades.filter(atividade => {
+      if (!atividade.status) return false
+      
+      const atividadeDate = createUTCDate(atividade.data)
+      const selectedDate = normalizeDate(date)
+      
+      return atividadeDate.getTime() === selectedDate.getTime()
+    })
   }
 
   const hasAtividadesForDate = (date: Date) => {
-    return getAtividadesForDate(date).length > 0
+    const normalizedDate = normalizeDate(date)
+    return atividades.some(atividade => {
+      if (!atividade.status) return false
+      const atividadeDate = createUTCDate(atividade.data)
+      return atividadeDate.getTime() === normalizedDate.getTime()
+    })
   }
 
   const selectedDateAtividades = getAtividadesForDate(selectedDate)
@@ -289,7 +334,7 @@ export default function AtividadesPage() {
               <DialogHeader>
                 <DialogTitle className="text-2xl" style={{ color: colors.primary }}>{selectedAtividade.nome}</DialogTitle>
                 <DialogDescription>
-                  {format(parseISO(selectedAtividade.data), 'dd/MM/yyyy', { locale: ptBR })} • {format(new Date(selectedAtividade.hinicio), 'HH:mm')} - {format(new Date(selectedAtividade.hfim), 'HH:mm')}
+                  {format(createSafeDate(selectedAtividade.data), 'dd/MM/yyyy', { locale: ptBR })} • {format(new Date(selectedAtividade.hinicio), 'HH:mm')} - {format(new Date(selectedAtividade.hfim), 'HH:mm')}
                 </DialogDescription>
               </DialogHeader>
               

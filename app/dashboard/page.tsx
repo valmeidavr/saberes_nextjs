@@ -115,7 +115,7 @@ export default function UserDashboard() {
           <Card className="max-w-2xl mx-auto bg-white" style={{ border: `2px solid ${colors.secondary}` }}>
             <CardContent className="pt-6">
               <h2 className="text-2xl font-bold mb-4" style={{ color: colors.primary }}>
-                🌱 Resgatando Saberes Tradicionais
+                🌱 Resgatando Saberes
               </h2>
               <p className="text-gray-600 leading-relaxed">
                 Conecte-se com a sabedoria ancestral, participe de atividades comunitárias, 
