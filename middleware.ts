@@ -18,7 +18,7 @@ export async function middleware(request: NextRequest) {
       
       if (!token) {
         const url = request.nextUrl.clone()
-        url.pathname = '/auth/signin'
+        url.pathname = '/'
         return NextResponse.redirect(url)
       }
       
@@ -37,7 +37,7 @@ export async function middleware(request: NextRequest) {
     if (pathname.startsWith('/dashboard')) {
       if (!token) {
         const url = request.nextUrl.clone()
-        url.pathname = '/auth/signin'
+        url.pathname = '/'
         return NextResponse.redirect(url)
       }
     }
