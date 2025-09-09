@@ -34,7 +34,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id.toString(),
           email: user.email,
           name: user.nome,
-          role: user.perfil
+          role: user.perfil === 'admin' ? 'ADMIN' : user.perfil
         }
       }
     })

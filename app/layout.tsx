@@ -16,37 +16,37 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXTAUTH_URL || 'https://saberes-nextjs.vercel.app'),
-  title: "Resgatando Saberes",
+  title: "PRS Saberes",
   description: "Sistema de gestão de conhecimentos tradicionais, agricultura sustentável e receitas saudáveis",
   keywords: "agricultura, receitas saudáveis, conhecimentos tradicionais, sustentabilidade",
-  authors: [{ name: "Resgatando Saberes" }],
-  creator: "Resgatando Saberes",
-  publisher: "Resgatando Saberes",
+  authors: [{ name: "PRS Saberes" }],
+  creator: "PRS Saberes",
+  publisher: "PRS Saberes",
   robots: "index, follow",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Resgatando Saberes"
+    title: "PRS Saberes"
   },
   formatDetection: {
     telephone: false
   },
   openGraph: {
     type: "website",
-    siteName: "Resgatando Saberes",
-    title: "Resgatando Saberes",
+    siteName: "PRS Saberes",
+    title: "PRS Saberes",
     description: "Sistema de gestão de conhecimentos tradicionais, agricultura sustentável e receitas saudáveis",
     images: [{
       url: "/icons/icon-512x512.png",
       width: 512,
       height: 512,
-      alt: "Resgatando Saberes"
+      alt: "PRS Saberes"
     }]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Resgatando Saberes",
+    title: "PRS Saberes",
     description: "Sistema de gestão de conhecimentos tradicionais, agricultura sustentável e receitas saudáveis",
     images: ["/icons/icon-512x512.png"]
   },
@@ -71,10 +71,10 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
-        <meta name="application-name" content="Resgatando Saberes" />
+        <meta name="application-name" content="PRS Saberes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Resgatando Saberes" />
+        <meta name="apple-mobile-web-app-title" content="PRS Saberes" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="msapplication-TileColor" content="#1e293b" />
         <meta name="msapplication-tap-highlight" content="no" />
@@ -86,14 +86,14 @@ export default function RootLayout({
         
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://saberes.app" />
-        <meta name="twitter:title" content="Resgatando Saberes" />
+        <meta name="twitter:title" content="PRS Saberes" />
         <meta name="twitter:description" content="Sistema de gestão de conhecimentos tradicionais" />
         <meta name="twitter:image" content="/icons/icon-512x512.png" />
         
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Resgatando Saberes" />
+        <meta property="og:title" content="PRS Saberes" />
         <meta property="og:description" content="Sistema de gestão de conhecimentos tradicionais" />
-        <meta property="og:site_name" content="Resgatando Saberes" />
+        <meta property="og:site_name" content="PRS Saberes" />
         <meta property="og:url" content="https://saberes.app" />
         <meta property="og:image" content="/icons/icon-512x512.png" />
       </head>
