@@ -2,6 +2,7 @@ import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { compare } from 'bcryptjs'
 import { prisma } from './prisma'
+import { Perfil } from '@prisma/client'
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -34,7 +35,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id.toString(),
           email: user.email,
           name: user.nome,
-          role: user.perfil === 'admin' ? 'ADMIN' : user.perfil
+          role: user.perfil === Perfil.ADMIN ? 'ADMIN' : 'USER'
         }
       }
     })
