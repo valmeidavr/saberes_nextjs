@@ -106,14 +106,14 @@ export default function SignUpPage() {
                 <div className="space-y-2">
                   <Label htmlFor="nome">Nome completo</Label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" style={{ color: 'rgb(238,183,0)' }} />
                     <Input
                       id="nome"
                       type="text"
                       placeholder="Seu nome completo"
                       value={formData.nome}
                       onChange={(e) => setFormData({...formData, nome: e.target.value})}
-                      className="pl-10"
+                      className="pl-10 bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 focus:border-yellow-400"
                       required
                     />
                   </div>
@@ -122,14 +122,14 @@ export default function SignUpPage() {
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" style={{ color: 'rgb(238,183,0)' }} />
                     <Input
                       id="email"
                       type="email"
                       placeholder="seu@email.com"
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="pl-10"
+                      className="pl-10 bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 focus:border-yellow-400"
                       required
                     />
                   </div>
@@ -138,14 +138,14 @@ export default function SignUpPage() {
                 <div className="space-y-2">
                   <Label htmlFor="senha">Senha</Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" style={{ color: 'rgb(238,183,0)' }} />
                     <Input
                       id="senha"
                       type="password"
                       placeholder="Sua senha (mín. 6 caracteres)"
                       value={formData.senha}
                       onChange={(e) => setFormData({...formData, senha: e.target.value})}
-                      className="pl-10"
+                      className="pl-10 bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 focus:border-yellow-400"
                       required
                       minLength={6}
                     />
@@ -155,14 +155,14 @@ export default function SignUpPage() {
                 <div className="space-y-2">
                   <Label htmlFor="confirmSenha">Confirmar senha</Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" style={{ color: 'rgb(238,183,0)' }} />
                     <Input
                       id="confirmSenha"
                       type="password"
                       placeholder="Confirme sua senha"
                       value={formData.confirmSenha}
                       onChange={(e) => setFormData({...formData, confirmSenha: e.target.value})}
-                      className="pl-10"
+                      className="pl-10 bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-400 focus:border-yellow-400"
                       required
                       minLength={6}
                     />
@@ -177,8 +177,8 @@ export default function SignUpPage() {
 
                 <Button 
                   type="submit" 
-                  className="w-full text-white" 
-                  style={{ backgroundColor: colors.primary }}
+                  className="w-full text-white hover:opacity-90 transition-opacity" 
+                  style={{ background: 'linear-gradient(135deg, rgb(238,183,0) 0%, rgb(255,200,20) 100%)' }}
                   disabled={loading}
                 >
                   {loading ? (
